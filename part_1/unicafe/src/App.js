@@ -3,22 +3,22 @@ import React, { useState } from 'react'
 const Header = ({title}) => <h2>{title}</h2>;
 const Button = ({handleClick,text}) => {
   return <button onClick={handleClick} >{text}</button>
-  };
+};
 const Statictics = ({good,neutral,bad}) => {
   const all = good + neutral + bad;
   const average = (good - bad)/all;
   const positive = good/all*100
-    if (good || neutral || bad) {
-      return <div>
-          <Display  text={'good'} parameter={good} />
-          <Display  text={'neutral'} parameter={neutral} />
-          <Display  text={'bad'} parameter={bad} />
-          <Display  text={'all'} parameter={all} />
-          <Display  text={'average'} parameter={average} />
-          <Display  text={'positive'} parameter={positive} />
-      </div>
-    }
-      return <div>no feedback given</div>
+  if (good || neutral || bad) {
+    return <div>
+        <Display  text={'good'} parameter={good} />
+        <Display  text={'neutral'} parameter={neutral} />
+        <Display  text={'bad'} parameter={bad} />
+        <Display  text={'all'} parameter={all} />
+        <Display  text={'average'} parameter={average} />
+        <Display  text={'positive'} parameter={positive} />
+    </div>
+  }
+    return <div>no feedback given</div>
 }
 const Display = ({text,parameter}) => {
   return <div>{text}: {parameter}</div>
@@ -40,7 +40,6 @@ const App = () => {
       <Button text={'bad'} handleClick={()=> setBad(bad + 1)} />
 
       <Header title={'statictics'} />
-
 
       <Statictics good={good} neutral={neutral} bad={bad} />
     </div>
