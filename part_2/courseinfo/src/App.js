@@ -6,6 +6,12 @@ const Title = ({title}) => {
 const Part = ({name,exercises}) => {
   return <div>{name} {exercises}</div>
 }
+const Total =({parts}) => {
+  const summ = parts.reduce((s,p) => {
+    return s += p.exercises
+  },0)
+  return <div><b>total of {summ} exercises</b></div>
+}
 const Content = ({parts}) => {
   return  parts.map(part => {
     return <Part key={part.id} name={part.name} exercises={part.exercises} />
@@ -15,6 +21,7 @@ const Course = (props) => {
   return  <>
     <Title title={props.course.name} />
     <Content parts={props.course.parts} />
+    <Total parts={props.course.parts} />
   </>
 }
 
@@ -37,6 +44,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
