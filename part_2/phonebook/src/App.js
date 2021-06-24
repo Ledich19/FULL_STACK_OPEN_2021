@@ -3,12 +3,15 @@ import Filter from './components/Filter'
 import PersonsForm from './components/PersonsForm'
 import Persons from './components/Persons'
 import personsServices from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [newName, setNewName ] = useState('')
   const [newNumber, setNewNumber ] = useState('')
   const [findPerson, setfindPerson ] = useState('')
+  const [infoMessage,setInfoMessage] = useState(null)
+  const [isError,setIsError] = useState(false)
   const handleChengeName = (event) => setNewName(event.target.value);
   const handleChengeNumber = (event) => setNewNumber(event.target.value);
   const handlChengeeFilter = (event) => setfindPerson(event.target.value);
@@ -33,7 +36,19 @@ const App = () => {
           setPersons(persons.map(p => p.name!==newName ? p : returnPerson))
           setNewName('')
           setNewNumber('')
-        })
+          setInfoMessage(`replaced number ${newName}`)
+          setTimeout(() => setInfoMessage(null),2000)
+        }).catch(error => {
+          setInfoMessage(`Information of ${newName} has already been removed from server`)
+          setIsError(true)
+          setPersons(persons.filter(p => p.name !== newName))
+          setTimeout(() => {
+            setInfoMessage(null)
+            setIsError(false)
+          },2000)
+        }
+          
+        )
 
       }
     } else {
@@ -47,6 +62,8 @@ const App = () => {
         setPersons(persons.concat(newPerson))
         setNewName('')
         setNewNumber('')
+        setInfoMessage(`Added ${newName}`)
+        setTimeout(() => setInfoMessage(null),2000)
       })
     }
   }
@@ -70,6 +87,7 @@ const App = () => {
       <h1>Phonebook</h1>
       <Filter handlChengeeFilter={handlChengeeFilter} value={findPerson}/>
       <h2>add a new</h2>
+      <Notification message={infoMessage} isError={isError}/>
       <PersonsForm 
         handleChengeName={handleChengeName}
         handleChengeNumber={handleChengeNumber}
