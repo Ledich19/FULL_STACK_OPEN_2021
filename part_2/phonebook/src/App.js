@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonsForm from './components/PersonsForm'
 import Persons from './components/Persons'
-import axios from 'axios'
+import personsServices from './services/persons'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -12,30 +12,58 @@ const App = () => {
   const handleChengeName = (event) => setNewName(event.target.value);
   const handleChengeNumber = (event) => setNewNumber(event.target.value);
   const handlChengeeFilter = (event) => setfindPerson(event.target.value);
+  useEffect(() => {
+    personsServices
+    .getAll()
+    .then(allPerson => setPersons(allPerson))
+  },[])
+  
   const addPerson = (event) => {
     event.preventDefault()
     const find = persons.findIndex(person => person.name.toUpperCase() === newName.toUpperCase())
+    
     if  (find >= 0) {
-      alert(`${newName} is already added to phonebook`)
+      const confirm = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)
+      if (confirm) {
+        const person = persons.find(p => p.name.toUpperCase() === newName.toUpperCase())
+        const newPerson = {...person, number: newNumber}
+        personsServices
+        .update(person.id,newPerson)
+        .then(returnPerson => {
+          setPersons(persons.map(p => p.name!==newName ? p : returnPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+
+      }
     } else {
       const newPerson = {
         name: newName,
         number: newNumber,
       }
-      setPersons(persons.concat(newPerson))
-      setNewName('')
-      setNewNumber('')
+      personsServices
+      .postPerson(newPerson)
+      .then(newPerson=> {
+        setPersons(persons.concat(newPerson))
+        setNewName('')
+        setNewNumber('')
+      })
     }
   }
+
+  const removePerson = (id,name) => {
+    const confirm = window.confirm(`Delete ${name} ?`)
+    if (confirm) {
+      personsServices
+      .deletePerson(id)
+      .then(setPersons(persons.filter(n => n.id !== id) ))
+    }
+  }
+
  const personShow = !findPerson
   ? persons
   : persons.filter(person => person.name.toUpperCase().includes(findPerson.toUpperCase()))
 
-  useEffect(() => {
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response => setPersons(response.data))
-  },[])
 
   return (
     <div>
@@ -50,7 +78,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons personShow={personShow}/>
+      <Persons personShow={personShow} removePerson={removePerson}/>
     </div>
   )
 }

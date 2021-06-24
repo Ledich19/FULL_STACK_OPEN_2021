@@ -9,6 +9,7 @@ const Country = ({ countryShow, setShowWeather, showWeather }) => {
 			.get(`http://api.weatherstack.com/current?access_key=${api_key}&query=Helsinki${name}`)
 			.then(response => setShowWeather(response))
 	}, [name, setShowWeather, api_key])
+	
 	return <>
 		<h1>{name}</h1>
 		<div>capital: {capital}</div>
