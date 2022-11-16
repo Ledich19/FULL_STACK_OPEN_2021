@@ -1,0 +1,16 @@
+;FFMETADATA1
+[CHAPTER]
+TIMEBASE=1/1000
+START=2614
+END=3157
+title=Location cy.hash() - get the current URL hash
+[CHAPTER]
+TIMEBASE=1/1000
+START=3421
+END=3705
+title=Location cy.location() - get window.location
+[CHAPTER]
+TIMEBASE=1/1000
+START=3807
+END=3994
+title=Location cy.url() - get the current URL
