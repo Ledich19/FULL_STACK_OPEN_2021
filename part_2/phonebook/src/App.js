@@ -45,7 +45,7 @@ const App = () => {
           setTimeout(() => {
             setInfoMessage(null)
             setIsError(false)
-          },2000)
+          },5000)
         }
           
         )
@@ -64,6 +64,15 @@ const App = () => {
         setNewNumber('')
         setInfoMessage(`Added ${newName}`)
         setTimeout(() => setInfoMessage(null),2000)
+      })
+      .catch(error => {
+        console.log(error.response.data.error)
+        setInfoMessage(error.response.data.error)
+        setIsError(true)
+        setTimeout(() => {
+          setInfoMessage(null)
+          setIsError(false)
+        },5000)
       })
     }
   }
